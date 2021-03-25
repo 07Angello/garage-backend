@@ -1,6 +1,6 @@
 const { model, Schema } = require('mongoose');
 
-const CustomerSchema = Schema({
+const MaintenanceSchema = Schema({
     description: {
         type: String,
         required: true,
@@ -23,11 +23,4 @@ const CustomerSchema = Schema({
     timestamps: true
 });
 
-CommentSchema.virtual('cars', {
-    ref: 'Car',
-    localField: '_id',
-    foreignField: 'customer',
-    justOne: false
-  });
-
-module.exports = model('Customer', CustomerSchema);
+module.exports = model('Maintenance', MaintenanceSchema);
