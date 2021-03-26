@@ -6,17 +6,22 @@ const MaintenanceSchema = Schema({
         required: true,
         trim: true
     },
+    mechanic: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    costPrice: {
+        type: Number,
+        required: true
+    },
     creationDate: {
         type: String
     },
     car: {
         type: Schema.Types.ObjectId,
         ref: "Car"
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
+    }
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },

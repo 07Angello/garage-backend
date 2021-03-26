@@ -11,6 +11,11 @@ const CarSchema = Schema({
         required: true,
         trim: true
     },
+    plate: {
+        type: String,
+        required: true,
+        trim: true
+    },
     year: {
         type: Number,
         required: true
@@ -21,18 +26,14 @@ const CarSchema = Schema({
     customer: {
         type: Schema.Types.ObjectId,
         ref: "Customer"
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
+    }
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
     timestamps: true
 });
 
-CommentSchema.virtual('maintenances', {
+CarSchema.virtual('maintenances', {
     ref: 'Maintenance',
     localField: '_id',
     foreignField: 'car',

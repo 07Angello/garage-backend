@@ -1,7 +1,7 @@
 const { model, Schema } = require('mongoose');
 
 const CustomerSchema = Schema({
-    description: {
+    name: {
         type: String,
         required: true,
         trim: true
@@ -12,18 +12,14 @@ const CustomerSchema = Schema({
     car: {
         type: Schema.Types.ObjectId,
         ref: "Car"
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
+    }
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
     timestamps: true
 });
 
-CommentSchema.virtual('cars', {
+CustomerSchema.virtual('cars', {
     ref: 'Car',
     localField: '_id',
     foreignField: 'customer',
