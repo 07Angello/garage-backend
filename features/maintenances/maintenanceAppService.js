@@ -1,6 +1,7 @@
 
 const { response } = require('express');
 const Maintenance = require('./Maintenance');
+const Car = require('../cars/Car');
 
 // POST: api/maintenances/
 const createMaintenances = async(req, res = response) => {
@@ -64,8 +65,7 @@ const updateMaintenance = async(req, res = response) => {
     const maintenanceId = req.params.id;
 
     const maintenance = await Maintenance.findById( maintenanceId )
-                                    .populate('cars')
-                                    .populate( 'user', 'name profilePhoto' );
+                                    .populate('car');
 
     try {
         if ( !maintenance ) {
@@ -105,7 +105,7 @@ const deleteMaintenance = async(req, res = response) => {
     const maintenanceId = req.params.id;
 
     const maintenance = await Maintenance.findById( maintenanceId )
-                            .populate( 'user', '_id' );;
+                            .populate('car');;
 
     try {
         if ( !maintenance ) {
@@ -116,7 +116,10 @@ const deleteMaintenance = async(req, res = response) => {
             });
         }
 
+        const car = await Car.findById( maintenance.car );
         await Maintenance.findByIdAndDelete( maintenanceId );
+
+        maintenance.car = car;
 
         return res.status(200).json({
             OK: true,

@@ -1,7 +1,8 @@
 
 const { response } = require('express');
 const Customer = require('./Customer');
-const User = require('../authentication/User');
+const Car = require('../cars/Car');
+const Maintenance = require('../maintenances/Maintenance');
 
 // POST: api/customers/
 const createCustomer = async(req, res = response) => {
@@ -121,7 +122,12 @@ const deleteCustomer = async(req, res = response) => {
     const customerId = req.params.id;
 
     const customer = await Customer.findById( customerId )
-                            .populate( 'user', '_id' );;
+                            .populate({
+                                path: 'cars',
+                                populate: {
+                                    path: 'maintenances'
+                                }
+                            });
 
     try {
         if ( !customer ) {
@@ -131,6 +137,14 @@ const deleteCustomer = async(req, res = response) => {
                 Message: 'Could not find any customer to delete.'
             });
         }
+
+        customer.cars.map(async(car) => {
+            car.maintenances.map(async(maintenance) => {
+                await Maintenance.findByIdAndDelete( maintenance._id )
+            });
+
+            await Car.findByIdAndDelete( car._id );
+        });
 
         await Customer.findByIdAndDelete( customerId );
 
